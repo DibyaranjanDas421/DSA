@@ -1,4 +1,4 @@
-package Searching.BinarySearch;
+package Searching.BinarySearch.BinarySearchLeetCode;
 
 public class OrderagnosticsBinarySearch {
 
