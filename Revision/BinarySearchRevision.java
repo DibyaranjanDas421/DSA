@@ -8,7 +8,9 @@ public class BinarySearchRevision {
         int[] nums1 = { 9, 7, 3, 7, 8 };
         // System.out.println(findPeakElement(nums1));
         int[] nums3 = { 4, 5, 6, 7, 0, 1, 2 };
-        System.out.println(search(nums3, 0));
+        // System.out.println(search(nums3, 0));
+        int[] nums4 = { 1, 1, 2, 3, 3, 4, 4, 8, 8 };
+        System.out.println(singleNonDuplicate(nums4));
     }
 
     public static int searchInsert(int[] nums, int target) {
@@ -97,6 +99,24 @@ public class BinarySearchRevision {
             }
         }
         return -1;
+    }
+
+    public static int singleNonDuplicate(int[] nums) {
+        int start = 0;
+        int end = nums.length - 1;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            if (mid % 2 != 0) {
+                mid = mid--;
+            }
+            if (nums[mid] == nums[mid + 1]) {
+                start = mid + 2;
+            } else {
+                end = mid;
+            }
+        }
+
+        return nums[start];
     }
 
 }
