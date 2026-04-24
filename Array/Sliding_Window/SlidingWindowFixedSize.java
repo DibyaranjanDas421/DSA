@@ -1,6 +1,8 @@
 package Sliding_Window;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SlidingWindowFixedSize {
 
@@ -11,6 +13,9 @@ public class SlidingWindowFixedSize {
 
         int[] nums1 = { 7, 4, 3, 9, 1, 8, 5, 2, 6 };
         System.out.println(Arrays.toString(getAverages(nums1, 3)));
+
+        int[] nums3 = { 1, 5, 4, 2, 9, 9, 9 };
+        System.out.println(maximumSubarraySum(nums3, 3));
 
     }
 
@@ -74,6 +79,34 @@ public class SlidingWindowFixedSize {
         }
 
         return avg;
+    }
+
+    // Maximum Sum of Distinct Subarrays With Length K
+    public static long maximumSubarraySum(int[] nums, int k) {
+        long windowSum = 0;
+        long maxSum = 0;
+        int right = 0;
+        int left = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (right = 0; right < nums.length; right++) {
+            map.put(nums[right], map.getOrDefault(nums[right], 0) + 1);
+            windowSum += nums[right];
+
+            if (right - left + 1 > k) {
+                map.put(nums[left], map.get(nums[left]) - 1);
+
+                if (map.get(nums[left]) == 0) {
+                    map.remove(nums[left]);
+                }
+                windowSum -= nums[left];
+                left++;
+            }
+
+            if (right - left + 1 == k && map.size() == k) {
+                maxSum = Math.max(maxSum, windowSum);
+            }
+        }
+        return maxSum;
     }
 
 }
