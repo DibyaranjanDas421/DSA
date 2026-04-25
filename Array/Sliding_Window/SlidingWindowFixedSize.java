@@ -1,21 +1,28 @@
 package Sliding_Window;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class SlidingWindowFixedSize {
 
     public static void main(String[] args) {
-        int[] nums = { 1, 12, -5, -6, 50, 3 };
-        System.out.println(findMaxAverage(nums, 4));
-        System.out.println(findMaxSum(nums, 4));
+        // int[] nums = { 1, 12, -5, -6, 50, 3 };
+        // System.out.println(findMaxAverage(nums, 4));
+        // System.out.println(findMaxSum(nums, 4));
 
-        int[] nums1 = { 7, 4, 3, 9, 1, 8, 5, 2, 6 };
-        System.out.println(Arrays.toString(getAverages(nums1, 3)));
+        // int[] nums1 = { 7, 4, 3, 9, 1, 8, 5, 2, 6 };
+        // System.out.println(Arrays.toString(getAverages(nums1, 3)));
 
-        int[] nums3 = { 1, 5, 4, 2, 9, 9, 9 };
-        System.out.println(maximumSubarraySum(nums3, 3));
+        // int[] nums3 = { 1, 5, 4, 2, 9, 9, 9 };
+        // System.out.println(maximumSubarraySum(nums3, 3));
+
+        int[] nums4 = { 1, 3, -1, -3, 5, 3, 6, 7 };
+        System.out.println(Arrays.toString(maxSlidingWindow1(nums4, 3)));
 
     }
 
@@ -108,5 +115,53 @@ public class SlidingWindowFixedSize {
         }
         return maxSum;
     }
+    //
 
+    public static int[] maxSlidingWindow(int[] nums, int k) {
+        Map<Integer, Integer> idx = new HashMap<>();
+        PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.reverseOrder());
+        int[] res = new int[(nums.length - k) + 1];
+        int right = 0;
+        int left = 0;
+
+        for (right = 0; right < nums.length; right++) {
+            idx.put(right, nums[right]);
+            queue.add(nums[right]);
+
+            if (right - left + 1 > k) {
+                queue.remove(idx.get(left));
+                left++;
+            }
+
+            if (right - left + 1 == k && queue.size() == k) {
+                res[left] = queue.peek();
+            }
+        }
+
+        return res;
+    }
+
+    public static int[] maxSlidingWindow1(int[] nums, int k) {
+        Deque<Integer> ans = new ArrayDeque<>();
+        int[] result = new int[(nums.length - k) + 1];
+        int idx = 0;
+        for (int i = 0; i < nums.length; i++) {
+            while (!ans.isEmpty() && nums[ans.peekLast()] < nums[i]) {
+                ans.pollLast();
+            }
+
+            ans.offer(i);
+
+            if (!ans.isEmpty() && ans.peekFirst() == i - k) {
+                ans.pollFirst();
+            }
+
+            if (i >= k - 1) {
+                result[idx++] = nums[ans.peekFirst()];
+            }
+
+        }
+
+        return result;
+    }
 }
